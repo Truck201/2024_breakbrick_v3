@@ -1,5 +1,5 @@
 export class Brick extends Phaser.GameObjects.Rectangle {
-  constructor(scene, x, y, width, height, color, alpha) {
+  constructor(scene, x, y, width, height, color, alpha, isBallCreator = false, isBombCreator = false) {
     super(scene, x, y, width, height, color, alpha);
 
     scene.add.existing(this);
@@ -9,6 +9,8 @@ export class Brick extends Phaser.GameObjects.Rectangle {
 
     this.toches = 0;
     this.maxToches = Phaser.Math.Between(1, 4);
+    this.isBallCreator = isBallCreator;
+    this.isBombCreator = isBombCreator;
   }
 
   hit() {
@@ -24,6 +26,12 @@ export class Brick extends Phaser.GameObjects.Rectangle {
     }
 
     if (this.toches === this.maxToches) {
+      if (this.isBallCreator) {
+        this.scene.addNewBall(this.x, this.y);
+      }
+      if (this.isBombCreator) {
+        this.scene.addNewBomb(this.x, this.y);
+      }
       this.destroy();
     }
   }
